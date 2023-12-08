@@ -1,5 +1,6 @@
 // DATA
 import 'package:beamer/beamer.dart';
+import 'package:beamer_testing/drawer.dart';
 import 'package:flutter/material.dart';
 
 class Book {
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home Screen'),
       ),
+      drawer: const CustomDrawer(),
       body: Center(
         child: ElevatedButton(
           onPressed: () => context.beamToNamed('/books'),
@@ -96,9 +98,20 @@ class AuthorDetailsScreen extends StatelessWidget {
         title: Text(book?.author ?? 'Not Found'),
       ),
       body: book != null
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Book: ${book!.title}'),
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Book: ${book!.title}'),
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () => context.beamToNamed('/'),
+                    child: const Text('Home'),
+                  ),
+                )
+              ],
             )
           : const SizedBox.shrink(),
     );
