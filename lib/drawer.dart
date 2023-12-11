@@ -44,6 +44,13 @@ class CustomDrawer extends StatelessWidget {
               context.beamToNamed('/books/1/Robert A. Heinlein');
             },
           ),
+          ListTile(
+            title: const Text('Books 1 Author (not stack)'),
+            onTap: () {
+              Navigator.pop(context);
+              context.beamToNamed('/books/1/Robert A. Heinlein', stacked: false);
+            },
+          ),
         ],
       ),
     );
