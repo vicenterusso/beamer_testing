@@ -1,6 +1,8 @@
 // DATA
 import 'package:beamer/beamer.dart';
+import 'package:beamer_testing/beamer_locations.dart';
 import 'package:beamer_testing/drawer.dart';
+import 'package:beamer_testing/router.dart';
 import 'package:flutter/material.dart';
 
 class Book {
@@ -62,27 +64,72 @@ class BooksScreen extends StatelessWidget {
   }
 }
 
-class BookDetailsScreen extends StatelessWidget {
+class BookDetailsScreen extends StatefulWidget {
   const BookDetailsScreen({Key? key, required this.book}) : super(key: key);
 
   final Book? book;
 
   @override
+  State<BookDetailsScreen> createState() => _BookDetailsScreenState();
+}
+
+class _BookDetailsScreenState extends State<BookDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    routerDelegate.addListener(_routeListener);
+  }
+
+  void _routeListener() {
+    // Should work if all locations are separated. Test Later
+    // var beamLocation = routerDelegate.currentBeamLocation;
+    // if (beamLocation is BooksLocation) {
+    //   // The HomePage is now the top-most route
+    //   // Perform your data refresh logic here
+    //   _refreshData();
+    // }
+
+    var currentPath = routerDelegate.configuration.uri.toString();
+    if (currentPath == '/books') {
+      // The HomePage is now the top-most route
+      // Perform your data refresh logic here
+      _refreshData();
+    }
+  }
+
+  void _refreshData() {
+    // Implement your data refresh logic
+    print("Data refreshed!");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(book?.title ?? 'Not Found'),
+        title: Text(widget.book?.title ?? 'Not Found'),
       ),
-      body: book != null
-          ? InkWell(
-              onTap: () => context.beamToNamed('/books/${book!.id}/${book!.author}'),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Author: ${book!.author}'),
-              ),
+      body: widget.book != null
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: () => context.beamToNamed('/books/${widget.book!.id}/${widget.book!.author}'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Author: ${widget.book!.author}'),
+                  ),
+                ),
+                const Text('BookDetailsScreen')
+              ],
             )
           : const SizedBox.shrink(),
     );
+  }
+
+  @override
+  void dispose() {
+    routerDelegate.removeListener(_routeListener);
+    super.dispose();
   }
 }
 
